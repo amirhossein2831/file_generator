@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//go:embed ../../../templates/*
+//go:embed controller_template.go.tmpl
 var templates embed.FS
 
 // Controller to hold template data
@@ -34,7 +34,7 @@ func CreateController(controllerName string) {
 	fileName := toSnakeCase(controllerName)
 
 	// Define the template file path
-	tmplFile := "template/controller_template.go.tmpl"
+	tmplFile := "controller_template.go.tmpl" // Since it's in the same directory
 
 	// Parse the template from the embedded filesystem
 	tmpl, err := template.ParseFS(templates, tmplFile)
@@ -51,7 +51,7 @@ func CreateController(controllerName string) {
 	// Define the output file path
 	outputDir := os.Getenv("PATH_FOR_CONTROLLER")
 	if outputDir == "" {
-		log.Fatalf("the path is not specific in env, please initiale the PATH_FOR_CONTROLLER variable")
+		log.Fatalf("the path is not specific in env, please initialize the PATH_FOR_CONTROLLER variable")
 	}
 
 	if err = os.MkdirAll(outputDir, 0755); err != nil {
