@@ -1,11 +1,11 @@
 package all
 
 import (
-	"file_generator/cmd/make/controller"
-	"file_generator/cmd/make/exception"
-	"file_generator/cmd/make/repository"
-	"file_generator/cmd/make/request"
-	"file_generator/cmd/make/service"
+	"github.com/amirhossein2831/file_generator/cmd/make/controller"
+	"github.com/amirhossein2831/file_generator/cmd/make/exception"
+	"github.com/amirhossein2831/file_generator/cmd/make/repository"
+	"github.com/amirhossein2831/file_generator/cmd/make/request"
+	"github.com/amirhossein2831/file_generator/cmd/make/service"
 	"github.com/spf13/cobra"
 )
 
