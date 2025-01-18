@@ -1,0 +1,40 @@
+package services
+
+import (
+	"context"
+)
+
+type I{{.ServiceName}} interface {
+	List(ctx context.Context) (interface{}, error)
+	Get(ctx context.Context) (interface{}, error)
+	Create(ctx context.Context) error
+	Update(ctx context.Context) error
+	Delete(ctx context.Context) error
+}
+
+type {{.ServiceName}} struct {
+}
+
+func New{{.ServiceName}}() *{{.ServiceName}} {
+	return &{{.ServiceName}}{}
+}
+
+func (service *{{.ServiceName}}) List(ctx context.Context) (interface{}, error) {
+	return nil, nil
+}
+
+func (service *{{.ServiceName}}) Get(ctx context.Context) (interface{}, error) {
+	return nil, nil
+}
+
+func (service *{{.ServiceName}}) Create(ctx context.Context) error {
+	return nil
+}
+
+func (service *{{.ServiceName}}) Update(ctx context.Context) error {
+	return nil
+}
+
+func (service *{{.ServiceName}}) Delete(ctx context.Context) error {
+	return nil
+}

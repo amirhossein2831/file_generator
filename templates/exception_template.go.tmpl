@@ -1,0 +1,21 @@
+package exceptions
+
+import (
+
+    "github.com/gofiber/fiber/v3"
+
+)
+
+type {{.ExceptionName}} struct{}
+
+func New{{.ExceptionName}}() *{{.ExceptionName}} {
+    return &{{.ExceptionName}}{}
+}
+
+func (exceptions *{{.ExceptionName}}) Handle(err error, c fiber.Ctx) error {
+    switch {
+
+    default:
+        return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+    }
+}

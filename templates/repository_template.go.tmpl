@@ -1,0 +1,40 @@
+package repositories
+
+type I{{.RepositoryName}} interface {
+	List() (interface{}, error)
+	Get() (interface{}, error)
+	Create() error
+	Update() error
+	Delete() error
+}
+
+type {{.RepositoryName}} struct {
+}
+
+func New{{.RepositoryName}}() *{{.RepositoryName}} {
+	return &{{.RepositoryName}}{}
+}
+
+func (repository *{{.RepositoryName}}) List() (interface{}, error) {
+	var res []*{{.RepositoryName}}
+
+	return res, nil
+}
+
+func (repository *{{.RepositoryName}}) Get() (interface{}, error) {
+	var res {{.RepositoryName}}
+
+	return &res, nil
+}
+
+func (repository *{{.RepositoryName}}) Create() error {
+	return nil
+}
+
+func (repository *{{.RepositoryName}}) Update() error {
+	return nil
+}
+
+func (repository *{{.RepositoryName}}) Delete() error {
+	return nil
+}
