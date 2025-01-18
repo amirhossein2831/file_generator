@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//go:embed ./../../../template/*
+//go:embed ../../../templates/*
 var templates embed.FS
 
 // Controller to hold template data
