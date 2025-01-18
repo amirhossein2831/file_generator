@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"embed"
 	"fmt"
 	"log"
 	"os"
@@ -11,6 +12,9 @@ import (
 
 	"github.com/spf13/cobra"
 )
+
+//go:embed ./../../../template/*
+var templates embed.FS
 
 // Controller to hold template data
 type Controller struct {
@@ -29,23 +33,11 @@ func CreateController(controllerName string) {
 	// Convert to snake_case for the file name
 	fileName := toSnakeCase(controllerName)
 
-	// Define the template file
-	//tmplFile := "templates/controller_template.go.tmpl"
+	// Define the template file path
+	tmplFile := "template/controller_template.go.tmpl"
 
-	// Get the directory of the current executable
-	execDir, err := os.Executable()
-	if err != nil {
-		log.Fatalf("Error getting executable path: %v", err)
-	}
-
-	// Get the directory of the current package (where the executable is located)
-	packageDir := filepath.Dir(execDir)
-
-	// Define the template file path relative to the package directory
-	tmplFile := filepath.Join(packageDir, "templates", "controller_template.go.tmpl")
-
-	// Parse the template
-	tmpl, err := template.ParseFiles(tmplFile)
+	// Parse the template from the embedded filesystem
+	tmpl, err := template.ParseFS(templates, tmplFile)
 	if err != nil {
 		log.Fatalf("Error parsing template: %v", err)
 	}
