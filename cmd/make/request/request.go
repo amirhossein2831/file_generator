@@ -1,15 +1,20 @@
 package request
 
 import (
+	"embed"
 	"fmt"
-	"github.com/spf13/cobra"
 	"log"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 	"text/template"
+
+	"github.com/spf13/cobra"
 )
+
+//go:embed request_template.go.tmpl
+var templates embed.FS
 
 // Request holds the template data
 type Request struct {
@@ -24,39 +29,39 @@ func toSnakeCase(str string) string {
 }
 
 func CreateRequest(requestName string) {
+	// Convert request name to snake_case for the file name
 	fileName := toSnakeCase(requestName)
 
-	// Define template file and output directory
-	tmplFile := "templates/request_template.go.tmpl"
+	// Define the template file path (relative to the embedded filesystem)
+	tmplFile := "request_template.go.tmpl" // File name for the embedded template
 
-	// get output dir
+	// Get output directory from the environment variable
 	outputDir := os.Getenv("PATH_FOR_REQUEST")
 	if outputDir == "" {
-		log.Fatalf("the path is not specific in env, please initiale the PATH_FOR_REQUEST variable")
+		log.Fatalf("the path is not specified in env, please initialize the PATH_FOR_REQUEST variable")
 	}
 
-	// Parse the template
-	tmpl, err := template.ParseFiles(tmplFile)
+	// Parse the template from the embedded filesystem
+	tmpl, err := template.ParseFS(templates, tmplFile)
 	if err != nil {
 		log.Fatalf("Error parsing template: %v", err)
 	}
 
-	// Prepare template data
+	// Prepare the data for the template
 	req := Request{
 		RequestName: requestName,
 		FileName:    fileName,
 	}
 
-	// Ensure output directory exists
-
+	// Ensure the output directory exists
 	if err = os.MkdirAll(outputDir, 0755); err != nil {
-		log.Fatalf("Error creating directory: %v", err)
+		log.Fatalf("Error creating directories: %v", err)
 	}
 
-	// Output file path
+	// Define the output file path
 	outputFile := filepath.Join(outputDir, fmt.Sprintf("%s.go", fileName))
 
-	// Check if file already exists
+	// Check if the file already exists
 	if _, err = os.Stat(outputFile); err == nil {
 		log.Fatalf("Error: The file %s already exists.\n", outputFile)
 	}
@@ -68,12 +73,13 @@ func CreateRequest(requestName string) {
 	}
 	defer file.Close()
 
-	// Execute template and write to file
+	// Execute the template and write to the file
 	err = tmpl.Execute(file, req)
 	if err != nil {
 		log.Fatalf("Error executing template: %v", err)
 	}
 
+	// Success message
 	fmt.Printf("Request %s created successfully at %s\n", requestName, outputFile)
 }
 

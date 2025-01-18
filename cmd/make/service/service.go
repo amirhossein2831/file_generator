@@ -1,38 +1,48 @@
 package service
 
 import (
+	"embed"
 	"fmt"
-	"github.com/spf13/cobra"
 	"log"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 	"text/template"
+
+	"github.com/spf13/cobra"
 )
 
-// Service to hold template data
+//go:embed service_template.go.tmpl
+var templates embed.FS
+
+// Service holds the template data
 type Service struct {
 	ServiceName string
 	FileName    string
 }
 
-// Function to convert PascalCase to snake_case
+// Convert PascalCase to snake_case
 func toSnakeCase(str string) string {
 	re := regexp.MustCompile("([a-z0-9])([A-Z])")
-	snake := re.ReplaceAllString(str, "${1}_${2}")
-	return strings.ToLower(snake)
+	return strings.ToLower(re.ReplaceAllString(str, "${1}_${2}"))
 }
 
 func CreateService(serviceName string) {
-	// Convert to snake_case for the file name
+	// Convert service name to snake_case for the file name
 	fileName := toSnakeCase(serviceName)
 
-	// Define the template file
-	tmplFile := "templates/service_template.go.tmpl"
+	// Define the template file path (relative to the embedded filesystem)
+	tmplFile := "service_template.go.tmpl" // File name for the embedded template
 
-	// Parse the template
-	tmpl, err := template.ParseFiles(tmplFile)
+	// Get output directory from the environment variable
+	outputDir := os.Getenv("PATH_FOR_SERVICE")
+	if outputDir == "" {
+		log.Fatalf("The path is not specified in env, please initialize the PATH_FOR_SERVICE variable")
+	}
+
+	// Parse the template from the embedded filesystem
+	tmpl, err := template.ParseFS(templates, tmplFile)
 	if err != nil {
 		log.Fatalf("Error parsing template: %v", err)
 	}
@@ -43,18 +53,12 @@ func CreateService(serviceName string) {
 		FileName:    fileName,
 	}
 
-	// Define the output file path
-	outputDir := os.Getenv("PATH_FOR_SERVICE")
-	if outputDir == "" {
-		log.Fatalf("the path is not specific in env, please initiale the PATH_FOR_SERVICE variable")
-	}
-
-	// make file
+	// Ensure the output directory exists
 	if err = os.MkdirAll(outputDir, 0755); err != nil {
 		log.Fatalf("Error creating directories: %v", err)
 	}
 
-	// Output file path
+	// Define the output file path
 	outputFile := filepath.Join(outputDir, fmt.Sprintf("%s.go", fileName))
 
 	// Check if the file already exists
@@ -79,7 +83,7 @@ func CreateService(serviceName string) {
 	fmt.Printf("Service %s created successfully at %s\n", serviceName, outputFile)
 }
 
-// ServiceCmd for generating the service file
+// ServiceCmd generates the service file
 var ServiceCmd = &cobra.Command{
 	Use:   "service [ServiceName]",
 	Short: "Create a new service",

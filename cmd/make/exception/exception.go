@@ -1,15 +1,20 @@
 package exception
 
 import (
+	"embed"
 	"fmt"
-	"github.com/spf13/cobra"
 	"log"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 	"text/template"
+
+	"github.com/spf13/cobra"
 )
+
+//go:embed exception_template.go.tmpl
+var templates embed.FS
 
 // Exception to hold template data
 type Exception struct {
@@ -28,11 +33,11 @@ func CreateException(exceptionName string) {
 	// Convert to snake_case for the file name
 	fileName := toSnakeCase(exceptionName)
 
-	// Define the template file
-	tmplFile := "templates/exception_template.go.tmpl"
+	// Define the template file path
+	tmplFile := "exception_template.go.tmpl" // No need for relative path to templates
 
-	// Parse the template
-	tmpl, err := template.ParseFiles(tmplFile)
+	// Parse the template from the embedded filesystem
+	tmpl, err := template.ParseFS(templates, tmplFile)
 	if err != nil {
 		log.Fatalf("Error parsing template: %v", err)
 	}
@@ -46,7 +51,7 @@ func CreateException(exceptionName string) {
 	// Define the output file path
 	outputDir := os.Getenv("PATH_FOR_EXCEPTION")
 	if outputDir == "" {
-		log.Fatalf("the path is not specific in env, please initiale the PATH_FOR_EXCEPTION variable")
+		log.Fatalf("the path is not specific in env, please initialize the PATH_FOR_EXCEPTION variable")
 	}
 
 	// make file
