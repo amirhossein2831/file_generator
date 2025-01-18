@@ -1,5 +1,10 @@
 package main
 
+import "file_generator/cmd"
+
 func main() {
-	println("Hello, World!")
+	err := cmd.Execute()
+	if err != nil {
+		panic(err)
+	}
 }
