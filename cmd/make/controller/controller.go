@@ -30,7 +30,19 @@ func CreateController(controllerName string) {
 	fileName := toSnakeCase(controllerName)
 
 	// Define the template file
-	tmplFile := "templates/controller_template.go.tmpl"
+	//tmplFile := "templates/controller_template.go.tmpl"
+
+	// Get the directory of the current executable
+	execDir, err := os.Executable()
+	if err != nil {
+		log.Fatalf("Error getting executable path: %v", err)
+	}
+
+	// Get the directory of the current package (where the executable is located)
+	packageDir := filepath.Dir(execDir)
+
+	// Define the template file path relative to the package directory
+	tmplFile := filepath.Join(packageDir, "templates", "controller_template.go.tmpl")
 
 	// Parse the template
 	tmpl, err := template.ParseFiles(tmplFile)
