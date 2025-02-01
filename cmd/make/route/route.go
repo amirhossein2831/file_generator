@@ -80,7 +80,7 @@ func CreateRoute(routeName string) {
 	}
 
 	// Success message
-	fmt.Printf("Request %s created successfully at %s\n", routeName, outputFile)
+	fmt.Printf("Route %s created successfully at %s\n", routeName, outputFile)
 }
 
 // RouteCmd generates a request file
