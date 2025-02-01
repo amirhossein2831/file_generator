@@ -8,10 +8,7 @@ import (
 	"github.com/amirhossein2831/file_generator/cmd/make/request"
 	"github.com/amirhossein2831/file_generator/cmd/make/route"
 	"github.com/amirhossein2831/file_generator/cmd/make/service"
-	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
-	"log"
-	"time"
 )
 
 // Make Commands for making file
@@ -22,7 +19,7 @@ var Make = &cobra.Command{
 
 func init() {
 	// init requirement
-	beforeMake()
+	//beforeMake()
 
 	// init subcommand
 	Make.AddCommand(
@@ -36,10 +33,13 @@ func init() {
 	)
 }
 
-func beforeMake() {
-	// Initialize Env variable
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("ENV Service: Failed to  loading .env file. %v.    timestamp: %s", err, time.Now().String())
-	}
-}
+//func beforeMake() {
+//	// Initialize Env variable
+//	err := godotenv.Load()
+//	if err != nil {
+//		err = godotenv.Load("env/development.env")
+//
+//		log.Fatalf("ENV Service: Failed to  loading .env file. %v.    timestamp: %s", err, time.Now().String())
+//	}
+//
+//}
