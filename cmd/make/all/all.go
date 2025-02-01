@@ -5,6 +5,7 @@ import (
 	"github.com/amirhossein2831/file_generator/cmd/make/exception"
 	"github.com/amirhossein2831/file_generator/cmd/make/repository"
 	"github.com/amirhossein2831/file_generator/cmd/make/request"
+	"github.com/amirhossein2831/file_generator/cmd/make/route"
 	"github.com/amirhossein2831/file_generator/cmd/make/service"
 	"github.com/spf13/cobra"
 )
@@ -20,5 +21,6 @@ var AllCmd = &cobra.Command{
 		repository.CreateRepository(args[0] + "Repository")
 		service.CreateService(args[0] + "Service")
 		exception.CreateException(args[0] + "Exception")
+		route.CreateRoute(args[0])
 	},
 }

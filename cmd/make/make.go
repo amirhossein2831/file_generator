@@ -6,6 +6,7 @@ import (
 	"github.com/amirhossein2831/file_generator/cmd/make/exception"
 	"github.com/amirhossein2831/file_generator/cmd/make/repository"
 	"github.com/amirhossein2831/file_generator/cmd/make/request"
+	"github.com/amirhossein2831/file_generator/cmd/make/route"
 	"github.com/amirhossein2831/file_generator/cmd/make/service"
 	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
@@ -30,6 +31,7 @@ func init() {
 		service.ServiceCmd,
 		repository.RepositoryCmd,
 		request.RequestCmd,
+		route.RouteCmd,
 		all.AllCmd,
 	)
 }
